@@ -49,7 +49,7 @@ public class ProductController {
 	@Autowired
 	CategoryDAO categoryDAO;
 
-	@RequestMapping("/addproduct") // , method=RequestMethod.POST)
+	@RequestMapping("/product") // , method=RequestMethod.POST)
 	public ModelAndView showAddProduct(@Valid @ModelAttribute("prod") Product p1, BindingResult result,
 			HttpServletRequest request, HttpSession session) throws IOException {
 
@@ -61,13 +61,13 @@ public class ProductController {
 		// session.setAttribute("category",category);
 		session.setAttribute("categoryList", categoryDAO.list());
 		System.out.println("In add product page");
-		return new ModelAndView("addproduct");
+		return new ModelAndView("product");
 
 	}
 
 	@RequestMapping("/registerP")
 	public String createProduct(@Valid @ModelAttribute("prod") Product p2, @RequestParam("image") MultipartFile file,
-			@RequestParam("img") MultipartFile file1, Model model, HttpServletRequest request) throws IOException {
+			@RequestParam("img") MultipartFile file1, Model model, HttpSession session) throws IOException {
 		// productDAO.saveOrUpdate(p2);
 
 		System.out.println("image");
@@ -122,25 +122,24 @@ public class ProductController {
 
 		model.addAttribute("message", "Products added successfully");
 		model.addAttribute("productList", productDAO.list());
-
-		return "addproduct";
+		
+		return "product";
 	}
 
 	@RequestMapping("product/remove/{id}")
-	public ModelAndView deleteProduct(@PathVariable("id") String id, Product p4, BindingResult result,
-			HttpServletRequest request) throws Exception {
-
+	public ModelAndView deleteProduct(@ModelAttribute("prod") Product p4,@PathVariable("id") String id,Model model) throws Exception {
+		
 		p4 = productDAO.get(id);
-		ModelAndView mv = new ModelAndView("addproduct");
+		ModelAndView mv = new ModelAndView("product");
 		if (p4 == null) {
 			mv.addObject("errorMessage", "Could not delete");
 		} else {
 			productDAO.delete(p4);
 		}
-		mv.addObject("productList", productDAO.list());
+		model.addAttribute("productList",productDAO.list());
 		return mv;
 	}
-
+	
 	@RequestMapping("product/edit/{id}") // @ModelAttribute("category"),Category
 	// category
 	public String editCategory(@ModelAttribute("id") Product p5, BindingResult result,
