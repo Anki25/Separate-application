@@ -28,9 +28,7 @@
 					</ul></li>
 			</ul>
 			<ul>
-
 				<div>
-
 					<form class="bs-example bs-example-form" role="form">
 						<div class="row">
 							<div class="col-lg-6">
@@ -54,6 +52,16 @@
 	<form:form action="${addAction}" commandName="category">
 	<table class="table table-hover">
 	<tr><td>
+	<form:label path="cat_id"><spring:message text="Category ID"/></form:label></td>
+	<c:choose>
+	<c:when test="${!empty category.cat_id}">
+	<td><form:input path="cat_id" disabled="true" readonly="true"/></td>
+	</c:when>
+	<c:otherwise>
+	<td><form:input path="cat_id" required="true"/></td>
+	</c:otherwise>
+	</c:choose></tr>
+	<tr><td>
 	<form:label path="cat_name"><spring:message text="Name"/></form:label></td>
 	<td><form:input path="cat_name" required="true"/></td></tr>
 	<tr><td><form:label path="description"><spring:message text="Description"/></form:label></td>
@@ -61,9 +69,9 @@
 	</tr>
 	<tr>
 	<td colspan="2"><c:if test="${!empty category.cat_name}">
-	<input type="submit" value="<spring:message text="Edit Category"/>" />
+	<input id="button" type="submit" value="<spring:message text="Edit Category"/>" />
 	</c:if><c:if test="${empty category.cat_name}">
-	<input type="submit" value="<spring:message text="Add Category"/>" />
+	<input id="button" type="submit" value="<spring:message text="Add Category"/>" />
 	</c:if></td>
 	</tr>
 	</table>
@@ -81,14 +89,13 @@
 	</tr>
 	<c:forEach items="${categoryList}" var="category">
 	<tr>
-	<td>${category.cat_Id}</td>
+	<td>${category.cat_id}</td>
 	<td>${category.cat_name}</td>
 	<td>${category.description}</td>
-	<td><a href="<c:url value='category/edit/${category.cat_Id}' />">Edit</a></td>
-	<td><a href="<c:url value='category/remove/${category.cat_Id}' />">Delete</a></td>
+	<td><a href="<c:url value='category/edit/${category.cat_id}' />">Edit</a></td>
+	<td><a href="<c:url value='category/remove/${category.cat_id}' />">Delete</a></td>
 	</tr>
 	</c:forEach>
 	</table>
 	</c:if>
 	<br>
-<%@ include file="footer.jsp" %>
