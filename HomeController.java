@@ -1,88 +1,138 @@
 package com.niit.controller;
 
+import java.io.IOException;
 import java.util.List;
 
-import javax.servlet.http.HttpSession;
-
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.niit.dao.CategoryDAO;
+import com.google.gson.Gson;
+import com.niit.dao.ProductDAO;
 import com.niit.dao.UserDAO;
-import com.niit.model.Category;
+import com.niit.model.Product;
 import com.niit.model.User;
+
 
 //@controller is a predefined annotation which we need to specified for our class to be act like as controller 
 @Controller
 public class HomeController {
+
+	@Autowired
+	ProductDAO productDAO;
+	
 	@Autowired
 	UserDAO userDAO;
-	
+
 	@Autowired
 	User user;
 
-	@Autowired
-	CategoryDAO categoryDAO;
-
-	// ctrl+shift+?-to comment ctrl+shift+|-to uncomment
 	// request mapping is also predefined a annotation for map the address which
 	// jsp page //u need to execute .
 	// here in these example my home page should display as soon as I will run
 	// my project
 	// Without giving a extension of jsp page
 
-	/*
-	 * if u want to navigate to other page without carrying the data-
-	 * 
-	 * @RequestMapping("/") public String home(){ return "home"; }
-	 */
-
-	// if u want to navigate with carrying data
 	@RequestMapping("/")
 	// user defined function which return a ModelAndViewobject .
-	public ModelAndView landingPage() {
-		ModelAndView mv = new ModelAndView("index");
-		mv.addObject("message", "Thank You");
+	public ModelAndView LandingPage() {
+		System.out.println("In Home page");
 		// creating a object for modelandview class and passing the parameter
 		// for //jsppage .without extension of jsp page. It will execute your
 		// main //page.
-		// return new ModelAndView("home");
-		List<Category> categoryList = categoryDAO.list(); // <> contains return
-															// type
-		mv.addObject("categoryList", categoryList);
-		System.out.println("Size: " + categoryList.size());
+		return new ModelAndView("home");
 
-		return mv;
+	}
+	
+	@RequestMapping("/adminhome")
+	public ModelAndView adminPage() {
+		System.out.println("In Admin page");
+
+		return new ModelAndView("adminhome");
+
 	}
 
-	@RequestMapping("/Sign In")
-	public ModelAndView login(@RequestParam(value = "id") String id,
-			@RequestParam(value = "password") String password,HttpSession session) {
-		String msg;
-		ModelAndView mv = new ModelAndView("home");
-		user = userDAO.isValidUser(id, password);
-		if (user == null) {
-			msg = "Invalid User..please try again!!";
-		} else {
-			if (user.getRole().equals("ROLE_ADMIN")) {
-				mv = new ModelAndView("adminhome");
-			} else {
-				session.setAttribute("welcomeMsg", user.getName());
-				session.setAttribute("userID",user.getId());
-			}
-		}
+	
+		@RequestMapping("/home1")
+	public ModelAndView showHome() {
+		System.out.println("In home page");
+		return new ModelAndView("home1");
 
-		mv.addObject("userClickedSignIn", "true");
-		return mv;
 	}
 
-	@RequestMapping("/Sign Up")
-	public ModelAndView register() {
-		ModelAndView mv = new ModelAndView("signup");
-		mv.addObject("userClickedSignUp", "true");
-		return mv;
+	@RequestMapping("/aboutus")
+	public ModelAndView showAboutUs() {
+		System.out.println("In About us page");
+		return new ModelAndView("aboutus");
+
 	}
+
+	@RequestMapping("/contactus")
+	public ModelAndView showContactUs() {
+		System.out.println("In Contact us page");
+		return new ModelAndView("contactus");
+
+	}
+
+	@RequestMapping("/privacynotice")
+	public ModelAndView showPrivacy() {
+		System.out.println("In Privacy Notice page");
+		return new ModelAndView("privacynotice");
+
+	}
+
+	@RequestMapping("/conditionsofsale")
+	public ModelAndView showCondition() {
+		System.out.println("In Conditions of Sale page");
+		return new ModelAndView("conditionsofsale");
+
+	}
+
+	@RequestMapping("/cancelpolicy")
+	public ModelAndView showCancelPolicy() {
+		System.out.println("In Cancel&Return Policy page");
+		return new ModelAndView("cancelpolicy");
+
+	}
+
+	@RequestMapping("/images")
+	public ModelAndView showImages() {
+		System.out.println("In images home page");
+		ModelAndView mv= new ModelAndView("home"); 
+		mv.addObject("signinmsg","please Sign In to continue...");
+		return mv;
+
+	}
+	
+	@RequestMapping("/productsuser")
+	public ModelAndView viewItems() throws JsonGenerationException, JsonMappingException, IOException {
+		List<Product> list = productDAO.list();
+		System.out.println("product list=" + list);
+		ObjectMapper om = new ObjectMapper();
+		String listjson = om.writeValueAsString(list);
+		System.out.println(listjson);
+		return new ModelAndView("productsuser", "listofitem", listjson);
+	}
+	
+	String setName;
+	List<Product> plist;
+
+	@SuppressWarnings("unchecked")
+	@RequestMapping("/GsonCon")
+	public @ResponseBody String getValues() throws Exception {
+		String result = "";
+		plist = productDAO.list();
+		Gson gson = new Gson();
+		result = gson.toJson(plist);
+		return result;
+
+	}
+	
 }
+ 
