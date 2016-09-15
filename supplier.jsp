@@ -54,6 +54,9 @@
 	<form:form action="${addAction}" commandName="supplier">
 	<table class="table table-hover">
 	<tr><td>
+	<form:label path="sup_id"><spring:message text="Supplier ID"/></form:label></td>
+	<td><form:input path="sup_id" required="true"/></td></tr>
+	<tr><td>
 	<form:label path="sup_name"><spring:message text="Name"/></form:label></td>
 	<td><form:input path="sup_name" required="true"/></td></tr>
 	<tr><td><form:label path="address"><spring:message text="Address"/></form:label></td>
@@ -61,9 +64,9 @@
 	</tr>
 	<tr>
 	<td colspan="2"><c:if test="${!empty supplier.sup_name}">
-	<input type="submit" value="<spring:message text="Edit Supplier"/>" />
+	<input id="button" type="submit" value="<spring:message text="Edit Supplier"/>" />
 	</c:if><c:if test="${empty supplier.sup_name}">
-	<input type="submit" value="<spring:message text="Add Supplier"/>" />
+	<input id="button" type="submit" value="<spring:message text="Add Supplier"/>" />
 	</c:if></td>
 	</tr>
 	</table>
@@ -81,11 +84,11 @@
 	</tr>
 	<c:forEach items="${supplierList}" var="supplier">
 	<tr>
-	<td>${supplier.sup_Id}</td>
+	<td>${supplier.sup_id}</td>
 	<td>${supplier.sup_name}</td>
 	<td>${supplier.address}</td>
-	<td><a href="<c:url value='supplier/edit/${supplier.sup_Id}' />">Edit</a></td>
-	<td><a href="<c:url value='supplier/remove/${supplier.sup_Id}' />">Delete</a></td>
+	<td><a href="<c:url value='supplier/edit/${supplier.sup_id}' />">Edit</a></td>
+	<td><a href="<c:url value='supplier/remove/${supplier.sup_id}' />">Delete</a></td>
 	</tr>
 	</c:forEach>
 	</table>
