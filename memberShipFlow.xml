@@ -4,29 +4,36 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/webflow
                           http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
 
+
+    <var name="user" class="com.niit.model.User" />	
+
 	<!-- Executed when webFlow is triggered -->
 	<on-start>
-		<evaluate expression="registrationHandler.initFlow()" result="flowScope.userDetails" />
+		<evaluate expression="registrationHandler.initFlow()" result="flowScope.us" />
 	</on-start>
 
-		<view-state id="start" view="memberDetails" model="flowScope.userDetails">
+		<view-state id="start" view="signup" model="flowScope.us">
 		<transition on="submit" to="validate" />
 	</view-state>
 
 	<action-state id="validate">
-		<evaluate expression="registrationHandler.validateDetails(userDetails,messageContext)"></evaluate>
+		<evaluate expression="registrationHandler.validateDetails(us,messageContext)"></evaluate>
 		<transition on="success" to="confirmDetails" />
 		<transition on="failure" to="start" />
 	</action-state>
 
-	<view-state id="confirmDetails" view="confirmDetails" model="flowScope.userDetails">
+	<view-state id="confirmDetails" view="confirmDetails" model="flowScope.us">
 		<transition on="edit" to="start" />
-		<transition on="submit" to="welcome" />
+		<transition on="submit" to="signin" >
+		<evaluate expression="us.setRole('ROLE_USER')" ></evaluate>
+		<evaluate expression="us.setEnabled(true)"></evaluate>
+		<evaluate expression="userDAO.saveOrUpdate(us)"></evaluate>
+		</transition>
 	</view-state>
 
-	<end-state id="welcome" view="welcome" />
+	<end-state id="signin" view="signin" />
 
-	<end-state id="toHome" view="externalRedirect:contextRelative:index.jsp" />
+	<end-state id="toHome" view="externalRedirect:contextRelative:signin.jsp" />
 
 	<end-state id="toException"
 		view="externalRedirect:contextRelative:exception.jsp" />
