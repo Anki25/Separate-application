@@ -4,7 +4,11 @@ import java.io.Serializable;
 import java.util.UUID;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 import org.springframework.stereotype.Component;
 
@@ -15,49 +19,48 @@ public class CartItem implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private String cartItemID;	
-	private String cartID; 	 	
-	private String userID;
-	private String pro_Id;
+	@ManyToOne
+	@JoinColumn(name="pro_Id", unique=true, nullable=false, updatable=false)
+	private Product product;
+	/*@ManyToOne
+	@JoinColumn(name="cartid", unique=true, nullable=false, updatable=false)
+	private Cart cart;*/
 	private int quantity;
-	private double totalPrice;
+	private double price;
+	
 	public String getCartItemID() {
 		return cartItemID;
 	}
 	public void setCartItemID(String cartItemID) {
 		this.cartItemID = cartItemID;
 	}
-	public String getCartID() {
-		return cartID;
+	public Product getProduct() {
+		return product;
 	}
-	public void setCartID(String cartID) {
-		this.cartID = cartID;
+	public void setProduct(Product product) {
+		this.product = product;
 	}
-	public String getUserID() {
-		return userID;
+	/*public Cart getCart() {
+		return cart;
 	}
-	public void setUserID(String userID) {
-		this.userID = userID;
-	}
-	public String getPro_Id() {
-		return pro_Id;
-	}
-	public void setPro_Id(String pro_Id) {
-		this.pro_Id = pro_Id;
-	}
+	public void setCart(Cart cart) {
+		this.cart = cart;
+	}*/
 	public int getQuantity() {
 		return quantity;
 	}
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
 	}
-	public double getTotalPrice() {
-		return totalPrice;
-	}
-	public void setTotalPrice(double totalPrice) {
-		this.totalPrice = totalPrice;
-	}
 	
+	public double getPrice() {
+		return price;
+	}
+	public void setPrice(double price) {
+		this.price = price;
+	}
 	public CartItem() {
 		
 		this.cartItemID ="CRTITEM" +UUID.randomUUID().toString().substring(24).toUpperCase();

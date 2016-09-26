@@ -1,7 +1,5 @@
 package com.niit.dao;
 
-
-
 import java.util.List;
 
 import org.hibernate.SessionFactory;
@@ -24,8 +22,16 @@ public class CartItemDAOImpl implements CartItemDAO {
 	}
 
 	@Transactional
-	public void saveOrUpdate(CartItem cartItem) {
-		sessionFactory.getCurrentSession().saveOrUpdate(cartItem);
+	public boolean save(CartItem cartItem) {
+		try {
+			sessionFactory.getCurrentSession().save(cartItem);
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+
+		}
+
 
 	}
 
@@ -37,8 +43,8 @@ public class CartItemDAOImpl implements CartItemDAO {
 	}
 
 	@Transactional
-	public List<CartItem> getCartItemsByCustomerId(String customerId) {
-		String hql = "from CartItem where customerId=" + "'" + customerId + "'";
+	public List<CartItem> getCartItemsByCustomerId(String userId) {
+		String hql = "from CartItem where userID=" + "'" + userId + "'";
 		Query query = sessionFactory.getCurrentSession().createQuery(hql);
 		List<CartItem> listOfCartItems = query.getResultList();
 		return listOfCartItems;
@@ -60,9 +66,26 @@ public class CartItemDAOImpl implements CartItemDAO {
 		List<CartItem> cartItemList = query.getResultList();
 		if(cartItemList!=null && !cartItemList.isEmpty())
 			return cartItemList.get(0);
+		else
 		return null;
 	}
-	
+
+	@Transactional
+	public CartItem getCartItemsByProductId(String productID) {
+		// TODO Auto-generated method stub
+		String hql = "from CartItem where pro_Id=" + "'" + productID + "'";
+		Query query = sessionFactory.getCurrentSession().createQuery(hql);
+		List<CartItem> cartItemList = query.getResultList();
+		if(cartItemList!=null && !cartItemList.isEmpty())
+			return cartItemList.get(0);
+		else
+		return null;
+	}
+
+	public boolean update(CartItem cartItem) {
+		// TODO Auto-generated method stub
+		return true;
+	}
 	
 	
 		
