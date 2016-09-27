@@ -2,7 +2,7 @@
  <%@ taglib prefix="c" 
            uri="http://java.sun.com/jsp/jstl/core" %>
  <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-<!DOCTYPE html>
+<!DOCTYPE>
 <html>
 <head>
 <title>The Lights Wagon</title>
@@ -10,6 +10,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <!-- Latest compiled and minified CSS -->
+
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
 	integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
@@ -23,25 +24,107 @@
 
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-<script src="jquery-1.8.3.js"></script>
+
+
+<script	src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.23/angular.min.js"></script>
 
 <!-- Latest compiled and minified JavaScript -->
 <script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
 	integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
 	crossorigin="anonymous"></script>
-	
 
+<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
 	
+	<script>
+var app = angular.module('myApp', []);
+ 
+function MyController($scope, $http) {
 
+	 $scope.sortType = 'name'; // set the default sort type
+	  $scope.sortReverse = false;  // set the default sort order
+	  $scope.searchPTitle = '';
+	  
+        $scope.getDataFromServer = function() {
+                $http({
+                        method : 'GET',
+                        url : 'GsonCon'
+                }).success(function(data, status, headers, config) {
+                        $scope.sup = data;  
+                }).error(function(data, status, headers, config) {
+                        // called asynchronously if an error occurs
+                        // or server returns response with an error status.
+                });
+        };
+        
+};
+
+	</script>
+		
 <style>
-body{ padding-top:150px;}
+#tb {
+    border: 2px solid #3CB371;
+    border-radius: 20px;
+}
+#product {
+    width: 700px;
+    height: 850px;
+    margin: 100px auto 50px auto;
+    padding: 20px;
+    position: relative;
+    border: 5px solid #3CB371;
+    border-radius: 20px;  
+}
+#category {
+    width: 700px;
+    height: 300px;
+    margin: 100px auto 50px auto;
+    padding: 20px;
+    position: relative;
+    border: 5px solid #3CB371;
+    border-radius: 20px;  
+}
+
+#signin {
+    width: 350px;
+    height: 350px;
+    margin: 100px auto 50px auto;
+    padding: 20px;
+    position: relative;
+    border: 5px solid #3CB371;
+    border-radius: 20px;  
+}
+
+#signup {
+    width: 420px;
+    height: 420px;
+    margin: 100px auto 50px auto;
+    padding: 20px;
+    position: relative;
+    border: 5px solid #3CB371;
+    border-radius: 20px;  
+}
+
+
+body{ padding-left:20px;
+padding-right:20px;
+padding-top:50px;}
 a:hover {background-color: #00008B;
 color:#00FFFF}
 .navbar .nav > li > a:hover { 
 background-color: #00008B;
 color:#00FFFF
 }
+.navbar .nav > li{
+color:#00FFFF;
+font-family:Verdana;
+}
+.navbar .nav > ul > a{
+color:#00FFFF;
+font-weight: bold;
+font-family:Verdana;
+}
+
 .navbar .nav > li > a{
 color:#00FFFF;
 font-weight: bold;
@@ -94,6 +177,20 @@ a.button:hover span:after {
   opacity: 1;
   right: 0;
 }
+#buttons {
+background: #3CB371;
+color: #fff;
+border: 1px solid #00FF7F;
+border-radius: 20px;
+width:150px;
+padding: 10px;
+box-shadow: 5px 5px 5px #eee;
+transition-duration: 0.4s;
+text-decoration: none;
+overflow: hidden;
+cursor: pointer;
+}
+
 input#button {
 background: #3CB371;
 color: #fff;
@@ -142,3 +239,81 @@ input#button:after {
 					<li><a href="aboutus">About Us</a></li>
 					<li><a href="contactus">Contact Us</a></li>
 				</ul>
+				
+				 <ul class="nav navbar-nav navbar-right">
+    <c:choose><c:when test="${empty loggedInUser}">
+    <li><a href="signin">Sign In </a></li>
+    <li><a href="memberShip.obj">Sign Up</a></li></c:when>
+    <c:when test="${not empty loggedInUser}">
+    <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown">My Profile <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+        <li><a href="#">My Account</a></li>
+        <li><a href="#">My Orders</a></li>
+        <li><a href="#">Settings</a></li>
+        <li><a href="perform_logout">Sign Out</a></li>        
+       </ul>
+       </li>
+       <li><c:if test="${not empty cartSize}">
+       <a href="#"><span class="glyphicon glyphicon-shopping-cart">Cart</span></a>(${cartSize})</c:if></li>
+       <li><c:if test="${empty cartSize}">
+       <a href="#"><span class="glyphicon glyphicon-shopping-cart">Cart</span></a></c:if></li></c:when>
+       </c:choose>
+     
+    </ul>   
+    </div>   
+   <!--  </div> -->
+<br>
+				<!-- <div class="container-fluid"> -->
+				<div>
+    <ul class="nav navbar-nav navbar-left">
+    <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Categories <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+        <c:forEach var="catname" items="${categoryList}">
+
+            <li><a href="<c:url value='images/${catname.cat_id}' />">${catname.cat_name}</a></li>
+
+        </c:forEach>
+        </ul>
+       </li>
+       <li>
+    <a href="productsuser">Products</a>    </li>
+    
+    
+     <li class="form">
+   <form class = "bs-example bs-example-form" role = "form">
+      
+ <div class = "col-sm-4">
+            <div class = "input-group">
+               <input type = "text" class = "form-control">
+               
+               <span class = "input-group-btn">
+                  <button class = "btn btn-default" type = "button">
+                     Go!
+                  </button>
+               </span>
+               
+            </div><!-- /input-group -->
+         </div><!-- /.col-lg-6 -->
+         
+      
+   </form>
+   </li>
+    
+      </ul>     
+      
+      
+      
+  <ul class="nav navbar-nav navbar-right">
+    <c:if test="${not empty loggedInUser}">
+    <li class="navbar-text" style="font-size:150%;">Welcome ${loggedInUser}!</li></c:if>
+    <c:if test="${loggedout==true}">
+    <li class="navbar-text" style="font-size:150%;">${logOutMessage}!</li></c:if>
+   
+ </ul>
+ </div>
+ </div>
+ </nav>
+ 
+ 
