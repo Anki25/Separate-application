@@ -1,6 +1,9 @@
   <%@ include file="header.jsp" %>
   
+  <br/><br/><br/><br/><br/><br/><br/>
+  
  <div class="container">
+ <h1 style="font-weight:bold;font-size: 400%;">${product.pro_name}</h1>
 	<div class="row">
 		<div class="col-md-4">
 		<div id="myCarousel" class="carousel slide" >
@@ -36,16 +39,23 @@
 				
 			<div class="col-md-8">	
 				
-				<p style="font-weight:bold;font-size: 200%;">${product.pro_name}</p>
 				<p style="font-weight:bold;font-size: 250%;"><i class="fa fa-inr" aria-hidden="true"></i>${product.price}</p><br />
 				<p>Brand: ${product.comp_name}</p>
 				<p>Sold By: ${product.supplier.sup_name}</p><br/>
 				<p>Product Description: ${product.description }</p><br/>
-				<a href="addtocart?pro_Id=${product.pro_Id}?userid=${loggedInUserID}" class="btn btn-success">Add to Cart</a>&nbsp;&nbsp;&nbsp;
-				
+			
+			
+				<form method="POST" action="buy${loggedInUserID}&${product.pro_Id}">
+Quantity:<input type="number" name="quantity" value=1 style="width:33px"/><br>
+<input type="submit" value="Buy" class="btn btn-warning shadow" style="font-size:19px;margin:30px 30px"/>
+</form>
+
+
+		<%-- 		<a href="buy${loggedInUserID}&${product.pro_Id}" id="buttons" class="btn btn-success">Add to Cart</a>&nbsp;&nbsp;&nbsp;
+		 --%>		
 		</div>
 		</div>
 		</div>
 		
-  <br /><br /><br />
+  <br /><br />
   <%@ include file="footer.jsp" %>

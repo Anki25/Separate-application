@@ -2,27 +2,23 @@ package com.niit.dao;
 
 import java.util.List;
 
+import org.springframework.stereotype.Repository;
+
 import com.niit.model.Cart;
-import com.niit.model.OrderedItems;
 
+@Repository
 public interface CartDAO {
-
-	void saveOrUpdate(Cart cart);
 	
-	void delete(String cartId);
+	public boolean save(Cart cart);
 	
-	Cart getCartByCustomerId(String customerId);
+	public boolean update(Cart cart);
 	
-	List<Cart> listCart();
+	public boolean delete(String pid,String usid);
 	
-	List<OrderedItems> listOrderedItems(String customerId);
+	public Cart get(String id,String userid);
 	
-	/*Cart createCart(Cart cart);
-
-	Cart read(String cartId);
-
-	void update(String cartId, Cart cart);
-
-	void delete(String Id);
-*/
+	public List<Cart> list(String id);
+	
+	public Cart getById(String CartID);
+	public List<Cart> mycartproducts(String id);
 }

@@ -2,65 +2,138 @@ package com.niit.dao;
 
 import java.util.List;
 
+import org.hibernate.Query;
 import org.hibernate.SessionFactory;
-import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.niit.dao.CartDAO;
 import com.niit.model.Cart;
-import com.niit.model.OrderedItems;
+import com.niit.model.Product;
+import com.niit.model.Cart;
 
+@SuppressWarnings("deprecation")
+@EnableTransactionManagement
 @Repository("cartDAO")
 public class CartDAOImpl implements CartDAO {
 
-	@Autowired
-	SessionFactory sessionFactory;
+	@Autowired // no need to create object of session factory ...automatically
+	// created
+	private SessionFactory sessionFactory;
 
 	public CartDAOImpl(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
 	}
 
 	@Transactional
-	public void saveOrUpdate(Cart cart) {
-		sessionFactory.getCurrentSession().saveOrUpdate(cart);
+	public boolean save(Cart cart) { // TODO
+		// Auto-generated method stub
+		try {
+			sessionFactory.getCurrentSession().save(cart);
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 
 	@Transactional
-	public void delete(String cartId) {
-		sessionFactory.getCurrentSession().delete(cartId);
-
+	public boolean update(Cart cart) { // TODO
+		// -generated method stub
+		try {
+			sessionFactory.getCurrentSession().update(cart);
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 
 	@Transactional
-	public Cart getCartByCustomerId(String customerId) {
-		String hql = "from Cart where customerId=" + "'" + customerId + "'";
-		Query query = sessionFactory.getCurrentSession().createQuery(hql);
-		List<Cart> customerList = query.getResultList();
-		if (customerList != null && !customerList.isEmpty())
-			return customerList.get(0);
-
-		return null;
+	public boolean delete(String pid,String usid) { // since object is given
+		// TODO Auto-generated method stub
+		try {
+			sessionFactory.getCurrentSession().delete(pid,usid);
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 
 	@Transactional
-	public List<Cart> listCart() {
-		String hql = "from Cart";
-		Query query = sessionFactory.getCurrentSession().createQuery(hql);
-		List<Cart> listOfCarts = query.getResultList();
-		return listOfCarts;
+	public List<Cart> list(String id){
+		// TODO Auto-generated method stub
+		String hql = " from Cart where userID="+"'"+id+"'";
+		Query query = sessionFactory.getCurrentSession().createQuery(hql); 
+		return query.list();
 
 	}
-
-	@Transactional
-	public List<OrderedItems> listOrderedItems(String customerId) {
-		String hql = "from OrderedItems where customerId="+"'"+customerId+"'";
-		Query query = sessionFactory.getCurrentSession().createQuery(hql);
-		List<OrderedItems> listOfOrderedItems = query.getResultList();
-		return listOfOrderedItems;
-	}
-
 	
+	@Transactional
+	public Cart get(String id,String Cartid) {
+		// TODO Auto-generated method stub
+		System.out.println("Inside getproductByName daoimpl");
+		System.out.println("id:" + id);
+		String hql = "from Cart where pro_Id=" + "'"+id+"'" + "and CartID="+ "'"+Cartid+"'";
 
+		Query query = sessionFactory.getCurrentSession().createQuery(hql);
+		List<Cart> list = query.list();
+
+		if (list == null || list.isEmpty()) {
+			return null;
+		} else {
+			return list.get(0);
+		}
+
+	}
+	
+	@Transactional
+	public Cart getById(String CartID) {
+		// TODO Auto-generated method stub selct * from Cart where id = '101'
+		String hql = "from Cart where CartId='" + CartID + "'"; // Cart is d
+																	// domain
+																	// object
+																	// name not
+																	// table
+																	// name
+
+		@SuppressWarnings("rawtypes")
+		Query query = sessionFactory.getCurrentSession().createQuery(hql);
+		@SuppressWarnings("unchecked")
+		List<Cart> list = (List<Cart>)query.list();
+
+		if (list != null && !list.isEmpty()) {
+			System.out.println("Cart retrieved from DAOImpl");
+			return list.get(0);
+		} else {
+			return null;
+		}
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+@Transactional
+	public List<Cart> mycartproducts(String id) {
+		
+			String hql = "from Cart where userID=" + "'" + id + "'";
+			Query query = sessionFactory.getCurrentSession().createQuery(hql); 
+			
+			List<Cart> all = query.list();
+			return all;
+		
+	}
 }
