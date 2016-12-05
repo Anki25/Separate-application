@@ -3,14 +3,12 @@
    <center>
           <h4>Sign In</h4>
           <p>NOT REGISTERED? <a href= "signup">SIGN UP</a> AND GET EXCITING OFFERS</p>
-         
-          <p style="color:red; text-align:center">
-          ${errorMessage}
+       
         
-         <form method="post" action="perform_login">
+         <form method="post" action="check">
          
-         <input type="text" name="username" placeholder="ENTER YOUR USERID" required><BR><BR><BR>
-         <input type="password" name="password" placeholder="ENTER YOUR PASSWORD"><BR><BR><BR>
+         <input type="text" name="txtname" placeholder="ENTER YOUR USERID" required><BR><BR><BR>
+         <input type="password" name="txtpass" placeholder="ENTER YOUR PASSWORD"><BR><BR><BR>
          <input type="submit" value="SIGN IN">
          </form><br><br>
          <br>
